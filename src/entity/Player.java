@@ -48,9 +48,8 @@ public class Player extends Entity {
 		}
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKeyState()) {
+				// Dash Key
 				if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
-				// Dash key.
-				if (Keyboard.getEventKey() == Keyboard.KEY_F) {
 					dashFlag = true;
 				}
 				// Teleportation
@@ -72,7 +71,6 @@ public class Player extends Entity {
 			if (Mouse.getEventButtonState()) {
 				if (Mouse.getEventButton() == 0) {
 					attackFlag = true;
-				}
 			}
 		}
 	}
