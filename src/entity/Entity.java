@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.util.ArrayList;
 
+import org.lwjgl.util.vector.Vector;
 import org.newdawn.slick.opengl.Texture;
 
 import engine.Main;
@@ -54,10 +55,28 @@ public abstract class Entity extends GameObject {
 			if (damageCondition) {
 				for (Entity e : damageRecipients) {
 					e.takeDamage(weapon.damage);
+					// Knocking back entity
+					getKnocked(weapon, e);
 				}
 			}
 			attacking = false;
 		}
+	}
+	
+	// Entity getting knocked back when attacked.
+	public void getKnocked(Weapon weapon, Entity ent2) {
+		// Get vector from this entity to the other entity
+		float xChange = ent2.x - x;
+		float yChange = ent2.y - y;
+		
+		// Normalising
+		float norm =  (float)Math.sqrt(xChange * xChange + yChange * yChange);
+		xChange = xChange / norm;
+		yChange = yChange / norm;
+		
+		// Applying knock back from weapon
+		ent2.x += xChange * 50 * weapon.knockBack;
+		ent2.y += yChange * 50 * weapon.knockBack;
 	}
 	
 	public void renderTargetSector(float angle) {
