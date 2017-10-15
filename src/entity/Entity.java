@@ -55,18 +55,18 @@ public abstract class Entity extends GameObject {
 		if (attacking && attackDelayTimer >= weapon.windUpTime + weapon.attackTime) { //damage registers when they finish their swing
 			if (damageCondition) {
 				for (Entity e : damageRecipients) {
-<<<<<<< HEAD
+
 					if (e.armour == null) {
 						e.takeDamage(weapon.damage);
 					}
 					else if (e.armour.blockChance < Utils.genRandomNumber(100)) {
 						e.takeDamage(weapon.damage);
 					}
-=======
+
 					e.takeDamage(weapon.damage);
 					// Knocking back entity
 					getKnocked(weapon, e);
->>>>>>> branch 'Developer' of https://github.com/Pinglet/CupOfJavaGame.git
+
 				}
 			}
 			attacking = false;
