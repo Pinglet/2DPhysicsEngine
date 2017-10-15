@@ -63,7 +63,7 @@ public class Player extends Entity {
 				if (Keyboard.getEventKey() == Keyboard.KEY_F) {
 					int xSpawn = Utils.genRandomNumber(Display.getWidth() - 32);
 					int ySpawn = Utils.genRandomNumber(Display.getHeight() - 32);
-					Main.game.currentObjects.add(new Enemy(xSpawn, ySpawn, 32, true, 1.5f, true, 1000, false, Weapon.DAGGER, 100, null));
+					Main.game.currentObjects.add(new Enemy(xSpawn, ySpawn, 32, true, 1.5f, true, 1000, false, Weapon.DAGGER, 100, armour.SUPER_ARMOUR));
 				}
 			}
 		}

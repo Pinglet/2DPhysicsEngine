@@ -63,7 +63,6 @@ public abstract class Entity extends GameObject {
 						e.takeDamage(weapon.damage);
 					}
 
-					e.takeDamage(weapon.damage);
 					// Knocking back entity
 					getKnocked(weapon, e);
 
