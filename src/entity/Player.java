@@ -22,7 +22,7 @@ public class Player extends Entity {
 	public float mouseAngle;
 
 	public Player() {
-		initEntity(Display.getWidth() / 2 - SIZE / 2, Display.getHeight() / 2 - SIZE / 2, SIZE, SIZE, "player/player", true, 1.5f, Weapon.WARHAMMER, 100, Armour.SUPER_ARMOUR);
+		initEntity(Display.getWidth() / 2 - SIZE / 2, Display.getHeight() / 2 - SIZE / 2, SIZE, SIZE, "player/player", true, 1.5f, Weapon.WARHAMMER, 100, Armour.NOT_SUPER_ARMOUR);
 	}
 	
 	public void getInput() {
