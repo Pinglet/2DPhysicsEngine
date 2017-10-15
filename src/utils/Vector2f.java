@@ -24,14 +24,19 @@ public class Vector2f {
 		y = y / this.norm();
 	}
 	
+	// Calculating the angle between two vectors
+	public static float angle(Vector2f v1, Vector2f v2) {
+		float angle = (float)(Math.acos(dot(v1, v2) / (v1.norm()*v2.norm())));
+		return angle;
+	}
+	
+	// The dot product of two vectors.
+	public static float dot(Vector2f v1, Vector2f v2) {
+		return v1.x * v2.x + v1.y * v2.y;
+	}
+	
 	// Adding two vectors together;
 	public static Vector2f add(Vector2f v1, Vector2f v2) {
 		return new Vector2f(v1.x + v2.x, v1.y + v2.y);
 	}
-	
-	// The dot product of two vectors.
-	public static Vector2f dot(Vector2f v1, Vector2f v2) {
-		return new Vector2f(v1.x * v2.x, v1.y * v2.y);
-	}
-	
 }
