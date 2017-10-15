@@ -19,6 +19,7 @@ public abstract class Entity extends GameObject {
 	public float speedFactor;
 	
 	public Weapon weapon;
+	public Armour armour;
 	public boolean attacking;
 	public float attackDelayTimer;
 	
@@ -30,12 +31,13 @@ public abstract class Entity extends GameObject {
 	public Texture[] textureArray;
 
 	public void initEntity(float x, float y, int width, int height, String textureNameArrayPrefix,
-						   boolean solid, float moveSpeed, Weapon weapon, int maxHealth) {
+						   boolean solid, float moveSpeed, Weapon weapon, int maxHealth, Armour armour) {
 		setTextureNameArray(textureNameArrayPrefix);
 		loadTextureArray(textureNameArray);
 		initGameObject(x, y, 0f, width, height, "entity/" + textureNameArray[4], solid);
 		this.moveSpeed = moveSpeed;
 		this.weapon = weapon;
+		this.armour = armour;
 		this.maxHealth = maxHealth;
 		currentHealth = maxHealth;
 		speedFactor = 1;
@@ -53,7 +55,12 @@ public abstract class Entity extends GameObject {
 		if (attacking && attackDelayTimer >= weapon.windUpTime + weapon.attackTime) { //damage registers when they finish their swing
 			if (damageCondition) {
 				for (Entity e : damageRecipients) {
-					e.takeDamage(weapon.damage);
+					if (e.armour == null) {
+						e.takeDamage(weapon.damage);
+					}
+					else if (e.armour.blockChance < Utils.genRandomNumber(100)) {
+						e.takeDamage(weapon.damage);
+					}
 				}
 			}
 			attacking = false;
@@ -86,7 +93,7 @@ public abstract class Entity extends GameObject {
 	}
 	
 	public void takeDamage(int damage) {
-		currentHealth -= damage;
+		currentHealth -= damage;			
 	}
 	
 	public void checkDeath() {

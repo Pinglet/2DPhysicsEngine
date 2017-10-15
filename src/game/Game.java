@@ -15,6 +15,8 @@ public class Game {
 	public ArrayList<GameObject> currentObjects;
 	public ArrayList<GameObject> objectsToDelete;
 	public ArrayList<GameObject> objectsToAdd;
+	
+
 
 	public Game() {
 		player = new Player();

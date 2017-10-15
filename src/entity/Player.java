@@ -22,7 +22,7 @@ public class Player extends Entity {
 	public float mouseAngle;
 
 	public Player() {
-		initEntity(Display.getWidth() / 2 - SIZE / 2, Display.getHeight() / 2 - SIZE / 2, SIZE, SIZE, "player/player", true, 1.5f, Weapon.OP_PLAYER_SWORD, 100);
+		initEntity(Display.getWidth() / 2 - SIZE / 2, Display.getHeight() / 2 - SIZE / 2, SIZE, SIZE, "player/player", true, 1.5f, Weapon.WARHAMMER, 100, Armour.SUPER_ARMOUR);
 	}
 	
 	public void getInput() {
@@ -63,7 +63,7 @@ public class Player extends Entity {
 				if (Keyboard.getEventKey() == Keyboard.KEY_F) {
 					int xSpawn = Utils.genRandomNumber(Display.getWidth() - 32);
 					int ySpawn = Utils.genRandomNumber(Display.getHeight() - 32);
-					Main.game.currentObjects.add(new Enemy(xSpawn, ySpawn, 32, true, 1.5f, true, 1000, false, Weapon.SWORD, 100));
+					Main.game.currentObjects.add(new Enemy(xSpawn, ySpawn, 32, true, 1.5f, true, 1000, false, Weapon.DAGGER, 100, null));
 				}
 			}
 		}
@@ -99,7 +99,7 @@ public class Player extends Entity {
 	}
 	
 	private void act() {
-		float moveAmount = moveSpeed * speedFactor * Time.getDelta();
+		float moveAmount = moveSpeed * speedFactor * Time.getDelta() / (armour.weight / 2);
 		float diagonalMoveAmount = moveAmount * (float)(Math.sqrt(2) / 2);
 		ArrayList<GameObject> collidingWith = Utils.collidesWith(this);
 		if (collidingWith.size() == 0 || !Utils.isCollidingWithSolids(this)) {

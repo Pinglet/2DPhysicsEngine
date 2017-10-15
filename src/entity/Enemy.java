@@ -27,8 +27,8 @@ public class Enemy extends Entity {
 	
 	
 	public Enemy(float x, float y, int size, boolean solid, float moveSpeed, boolean aggressive,
-				 int detectRange, boolean roaming, Weapon weapon, int maxHealth) {
-		initEntity(x, y, size, size, "enemy/enemy", solid, moveSpeed, weapon, maxHealth);
+				 int detectRange, boolean roaming, Weapon weapon, int maxHealth, Armour armour) {
+		initEntity(x, y, size, size, "enemy/enemy", solid, moveSpeed, weapon, maxHealth, armour);
 		this.aggressive = aggressive;
 		this.detectRange = detectRange;
 		roamX = x;
