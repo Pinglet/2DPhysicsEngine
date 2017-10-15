@@ -55,16 +55,38 @@ public abstract class Entity extends GameObject {
 		if (attacking && attackDelayTimer >= weapon.windUpTime + weapon.attackTime) { //damage registers when they finish their swing
 			if (damageCondition) {
 				for (Entity e : damageRecipients) {
+<<<<<<< HEAD
 					if (e.armour == null) {
 						e.takeDamage(weapon.damage);
 					}
 					else if (e.armour.blockChance < Utils.genRandomNumber(100)) {
 						e.takeDamage(weapon.damage);
 					}
+=======
+					e.takeDamage(weapon.damage);
+					// Knocking back entity
+					getKnocked(weapon, e);
+>>>>>>> branch 'Developer' of https://github.com/Pinglet/CupOfJavaGame.git
 				}
 			}
 			attacking = false;
 		}
+	}
+	
+	// Entity getting knocked back when attacked.
+	public void getKnocked(Weapon weapon, Entity ent2) {
+		// Get vector from this entity to the other entity
+		float xChange = ent2.x - x;
+		float yChange = ent2.y - y;
+		
+		// Normalising
+		float norm =  (float)Math.sqrt(xChange * xChange + yChange * yChange);
+		xChange = xChange / norm;
+		yChange = yChange / norm;
+		
+		// Applying knock back from weapon
+		ent2.x += xChange * 50 * weapon.knockBack;
+		ent2.y += yChange * 50 * weapon.knockBack;
 	}
 	
 	public void renderTargetSector(float angle) {
