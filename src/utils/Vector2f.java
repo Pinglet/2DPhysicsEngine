@@ -18,24 +18,30 @@ public class Vector2f {
 		return value;
 	}
 	
-	// Normalises the vector (So it has norm 1)
+	// Normalises the vector (So it has norm 1).
 	public void normalise() {
 		x = x / this.norm();
 		y = y / this.norm();
 	}
 	
-	// Calculating the angle between two vectors
-	public static float angle(Vector2f v1, Vector2f v2) {
+	// Calculating the angle between two vectors.
+	public float calculateAngle(Vector2f v1, Vector2f v2) {
 		float angle = (float)(Math.acos(dot(v1, v2) / (v1.norm()*v2.norm())));
 		return angle;
 	}
 	
+	// Rotates the vector counter clockwise.
+	public void rotate(Vector2f v1, float angle) {
+		x = x * (float)Math.cos(angle) - y * (float)Math.sin(angle);
+		y = x * (float)Math.sin(angle) + y * (float)Math.cos(angle);
+	}
+	
 	// The dot product of two vectors.
-	public static float dot(Vector2f v1, Vector2f v2) {
+	public float dot(Vector2f v1, Vector2f v2) {
 		return v1.x * v2.x + v1.y * v2.y;
 	}
 	
-	// Adding two vectors together;
+	// Adding two vectors together.
 	public static Vector2f add(Vector2f v1, Vector2f v2) {
 		return new Vector2f(v1.x + v2.x, v1.y + v2.y);
 	}
