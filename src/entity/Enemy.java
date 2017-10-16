@@ -43,14 +43,14 @@ public class Enemy extends Entity {
 		if (target == null) {
 			if (Utils.calculateDistanceFromCentre(this, Main.game.player) < detectRange && aggressive) {
 				target = Main.game.player;
-				chaseTarget();
+//				chaseTarget();
 			} else if (roaming) {
 				roam();
 			}
 		}
 		if (target != null && aggressive) {
-			chaseTarget();
-			handleAttack();
+//			chaseTarget();
+//			handleAttack();
 		}
 		checkTexture();
 	}
@@ -62,41 +62,15 @@ public class Enemy extends Entity {
 		Utils.drawQuadTex(texture, x, y, z, width, height);
 	}
 	
-	private void handleAttack() {
-		boolean targetWithinRange = Utils.isCollidingWithSector(target, this,
-				Utils.calculateAngle(x + width / 2, y + height / 2, target.x + target.width / 2, target.y + target.height / 2));
-		ArrayList<Entity> targetAsList = new ArrayList<Entity>();
-		targetAsList.add(target);
-		attAttack(targetWithinRange, targetWithinRange, targetAsList);
-	}
+//	private void handleAttack() {
+//		boolean targetWithinRange = Utils.isCollidingWithSector(target, this,
+//				Utils.calculateAngle(x + width / 2, y + height / 2, target.x + target.width / 2, target.y + target.height / 2));
+//		ArrayList<Entity> targetAsList = new ArrayList<Entity>();
+//		targetAsList.add(target);
+//		attAttack(targetWithinRange, targetWithinRange, targetAsList);
+//	}
 	
-	private void chaseTarget() {
-		ArrayList<GameObject> collidingWith = Utils.collidesWith(this);
-		/*
-		 * I think this section is old code and unnecessary as the player is now included in the list of currently existing objects
-		 * 
-		if (Utils.isColliding(this, target)) {
-			collidingWith.add(target);
-		}
-		*/
-		if (collidingWith.size() == 0 || !Utils.isCollidingWithSolids(this)) {
-			chase();
-			collidingWith = Utils.collidesWith(this);
-			if (Utils.isColliding(this, target)) {
-				collidingWith.add(target);
-			}
-			if (collidingWith.size() > 0) {
-				for (GameObject go : collidingWith) {
-					if (!go.solid) {
-						continue;
-					}
-					correctCollision(go, collidingWith);
-				}
-			}
-		} else {
-			System.out.println("Error: enemy should not be colliding with any solid objects when the frame updates");
-		}
-	}
+
 	
 	private void roam() {
 		if (x == roamX && y == roamY) {

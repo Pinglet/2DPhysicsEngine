@@ -1,0 +1,291 @@
+	=======================================Entity==================================================
+	
+	public void correctCollision(GameObject go, ArrayList<GameObject> collidingWith) {
+		float simX = x;
+		float simY = y;
+			if (Utils.topLeftCornerIntersects(this, go)) {
+				if (Utils.topRightCornerIntersects(this, go) && !Utils.bottomLeftCornerIntersects(this, go) && yMoveVector > 0) {
+					simY = go.y - this.height;
+				}
+				if (!Utils.topRightCornerIntersects(this, go) && Utils.bottomLeftCornerIntersects(this, go) && xMoveVector < 0) {
+					simX = go.x + go.width;
+				}
+				if (!Utils.topRightCornerIntersects(this, go) && !Utils.bottomLeftCornerIntersects(this, go)) {
+					if (xMoveVector < 0 && yMoveVector > 0) {
+						if (Math.abs(go.x + go.width - simX) > Math.abs(go.y - this.height - simY)) {
+							simY = go.y - this.height;
+						} else {
+							simX = go.x + go.width;
+						}
+					} else if (xMoveVector < 0) {
+						simX = go.x + go.width;
+					} else if (yMoveVector > 0) {
+						simY = go.y - this.height;
+					}
+				}
+			} else if (Utils.bottomRightCornerIntersects(this, go)) {
+				if (Utils.bottomLeftCornerIntersects(this, go) && !Utils.topRightCornerIntersects(this, go) && yMoveVector < 0) {
+					simY = go.y + go.height;
+				}
+				if (!Utils.bottomLeftCornerIntersects(this, go) && Utils.topRightCornerIntersects(this, go) && xMoveVector > 0) {
+					simX = go.x - this.width;
+				}
+				if (!Utils.bottomLeftCornerIntersects(this, go) && !Utils.topRightCornerIntersects(this, go)) {
+					if (xMoveVector > 0 && yMoveVector < 0) {
+						if (Math.abs(go.x - this.width - simX) > Math.abs(go.y + go.height - simY)) {
+							simY = go.y + go.height;
+						} else {
+							simX = go.x - this.width;
+						}
+					} else if (xMoveVector > 0 && yMoveVector >= 0) {
+						simX = go.x - this.width;
+					} else if (xMoveVector <= 0 && yMoveVector < 0) {
+						simY = go.y + go.height;
+					}
+				}
+			} else if (Utils.bottomLeftCornerIntersects(this, go)) {
+				if (xMoveVector < 0 && yMoveVector < 0) {
+					if (Math.abs(go.x + go.width - simX) > Math.abs(go.y + go.height - simY)) {
+						simY = go.y + go.height;
+					} else {
+						simX = go.x + go.width;
+					}
+				} else if (xMoveVector < 0) {
+					simX = go.x + go.width;
+				} else if (yMoveVector < 0) {
+					simY = go.y + go.height;
+				}
+			} else if (Utils.topRightCornerIntersects(this, go)) {
+				if (xMoveVector > 0 && yMoveVector > 0) {
+					if (Math.abs(go.x - this.width - simX) > Math.abs(go.y - this.height - simY)) {
+						simY = go.y - this.height;
+					} else {
+						simX = go.x - this.width;
+					}
+				} else if (xMoveVector > 0) {
+					simX = go.x - this.width;
+				} else if (yMoveVector > 0) {
+					simY = go.y - this.height;
+				}
+			}
+			x = simX;
+			y = simY;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+=========================================utils==========================================================
+	
+		public static boolean isColliding(GameObject go1, GameObject go2) {
+		Rectangle r1 = new Rectangle((int)go1.x, (int)go1.y, go1.width,  go1.height);
+		Rectangle r2 = new Rectangle((int)go2.x, (int)go2.y, go2.width,  go2.height);
+		if (r1.intersects(r2)) {
+			return true;
+		}
+		return false;
+	}
+	
+	//Used for finding if enemy should be killed when within target sector
+	/*
+	public static boolean isCollidingWithSector(GameObject go1, Player player) {
+		float x1 = player.x + player.width / 2;
+		float y1 = player.y + player.height / 2;
+		
+		ArrayList<Integer> xPoints = new ArrayList<Integer>();
+		ArrayList<Integer> yPoints = new ArrayList<Integer>();
+		
+		xPoints.add((int)x1);
+		yPoints.add((int)y1);
+		
+		for (double angle = player.mouseAngle - player.width / 2; angle < player.mouseAngle + player.width / 2; angle += 0.2)
+		{
+			double anglerad = Math.toRadians(angle);
+			
+			x1 += (float)Math.sin(anglerad) * player.attackRange;
+			y1 += (float)Math.cos(anglerad) * player.attackRange;
+			
+		    xPoints.add((int)x1);
+		    yPoints.add((int)y1);
+		}
+		
+		xPoints.add((int)x1);
+		yPoints.add((int)y1);
+		
+		int arraySize = xPoints.size();
+		int[] xPointsArray = new int[arraySize];
+		int[] yPointsArray = new int[arraySize];
+		
+		for (int i = 0; i < arraySize; i++) {
+			xPointsArray[i] = xPoints.get(i);
+			yPointsArray[i] = yPoints.get(i);
+		}
+		
+		Polygon p = new Polygon(xPointsArray, yPointsArray, arraySize);
+		Rectangle r = new Rectangle((int)go1.x, (int)go1.y, go1.width,  go1.height);
+		
+		if (p.intersects(r)) {
+			return true;
+		}
+		return false;
+	}
+	*/
+	
+	public static boolean isCollidingWithSector(GameObject target, Entity attacker, float angle) {
+		float xCentre = attacker.x + attacker.width / 2;
+		float yCentre = attacker.y + attacker.height / 2;
+		
+		ArrayList<Integer> xPoints = new ArrayList<Integer>();
+		ArrayList<Integer> yPoints = new ArrayList<Integer>();
+		
+		xPoints.add((int)xCentre);
+		yPoints.add((int)yCentre);
+		
+		xPoints.add((int)(xCentre + (float)Math.sin(Math.toRadians(angle - 45)) * attacker.weapon.attackRange));
+		yPoints.add((int)(yCentre + (float)Math.cos(Math.toRadians(angle - 45)) * attacker.weapon.attackRange));
+		
+		xPoints.add((int)(xCentre + (float)Math.sin(Math.toRadians(angle)) * attacker.weapon.attackRange * (float)Math.sqrt(2)));
+		yPoints.add((int)(yCentre + (float)Math.cos(Math.toRadians(angle)) * attacker.weapon.attackRange * (float)Math.sqrt(2)));
+		
+		xPoints.add((int)(xCentre + (float)Math.cos(Math.toRadians(45 - angle)) * attacker.weapon.attackRange));
+		yPoints.add((int)(yCentre + (float)Math.sin(Math.toRadians(45 - angle)) * attacker.weapon.attackRange));
+		
+		int arraySize = xPoints.size();
+		int[] xPointsArray = new int[arraySize];
+		int[] yPointsArray = new int[arraySize];
+		for (int i = 0; i < arraySize; i++) {
+			xPointsArray[i] = xPoints.get(i);
+			yPointsArray[i] = yPoints.get(i);
+		}
+		
+		//Circle of radius attackRange around the player
+		Ellipse2D e = new Ellipse2D.Float(xCentre - attacker.weapon.attackRange, yCentre - attacker.weapon.attackRange,
+										  attacker.weapon.attackRange * 2, attacker.weapon.attackRange * 2);
+		//Rotated square of side length attackRange
+		Polygon p = new Polygon(xPointsArray, yPointsArray, arraySize);
+		//Rectangle representing enemy hitbox
+		Rectangle r = new Rectangle((int)target.x, (int)target.y, target.width, target.height);
+		
+		if (p.intersects(r) && e.intersects(r)) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	public static boolean isTouching(GameObject go1, GameObject go2) {
+		Rectangle r1 = new Rectangle((int)go1.x - 1, (int)go1.y - 1, go1.width + 2,  go1.height + 2);
+		Rectangle r3 = new Rectangle((int)go2.x, (int)go2.y, go2.width, go2.height);
+		if (r1.intersects(r3)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static ArrayList<GameObject> touchingWith(GameObject object) {
+		ArrayList<GameObject> touchingWith = new ArrayList<GameObject>();
+		ArrayList<GameObject> objects = Main.game.currentObjects;
+		for (GameObject go : objects) {
+			if (go != object) {
+				if (isTouching(go, object)) {
+					touchingWith.add(go);
+				}
+			}
+		}
+		return touchingWith;
+	}
+	
+	public static ArrayList<GameObject> collidesWith(GameObject object) {
+		ArrayList<GameObject> collidingWith = new ArrayList<GameObject>();
+		ArrayList<GameObject> objects = Main.game.currentObjects;
+		for (GameObject go : objects) {
+			if (go != object) {
+				if (isColliding(go, object)) {
+					collidingWith.add(go);
+				}
+			}
+		}
+		return collidingWith;
+	}
+	
+	public static boolean isCollidingWithSolids(GameObject object) {
+		ArrayList<GameObject> collidingWith = collidesWith(object);
+		for (GameObject go : collidingWith) {
+			if (go.solid) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	================================Player.act()====================================
+	
+			ArrayList<GameObject> collidingWith = Utils.collidesWith(this);
+		if (collidingWith.size() == 0 || !Utils.isCollidingWithSolids(this)) {
+			if (xMoveVector != 0 && yMoveVector != 0) {
+				x += diagonalMoveAmount * xMoveVector;
+				y += diagonalMoveAmount * yMoveVector;
+			} else {
+				x += moveAmount * xMoveVector;
+				y += moveAmount * yMoveVector;
+			}
+			collidingWith = Utils.collidesWith(this);
+			for (GameObject go : collidingWith) {
+				if (!go.solid) {
+					continue;
+				}
+				correctCollision(go, collidingWith);
+			}
+		} else {
+			System.out.println("Error: player should not be colliding with anything when the frame updates");
+		}
+	
+	
+	
+	
+	
+	
+	==============================Enemy====================================================
+	
+		private void chaseTarget() {
+		ArrayList<GameObject> collidingWith = Utils.collidesWith(this);
+		/*
+		 * I think this section is old code and unnecessary as the player is now included in the list of currently existing objects
+		 * 
+		if (Utils.isColliding(this, target)) {
+			collidingWith.add(target);
+		}
+		*/
+		if (collidingWith.size() == 0 || !Utils.isCollidingWithSolids(this)) {
+			chase();
+			collidingWith = Utils.collidesWith(this);
+			if (Utils.isColliding(this, target)) {
+				collidingWith.add(target);
+			}
+			if (collidingWith.size() > 0) {
+				for (GameObject go : collidingWith) {
+					if (!go.solid) {
+						continue;
+					}
+					correctCollision(go, collidingWith);
+				}
+			}
+		} else {
+			System.out.println("Error: enemy should not be colliding with any solid objects when the frame updates");
+		}
+	}
+	
+	
+	

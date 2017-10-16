@@ -22,7 +22,7 @@ public class Player extends Entity {
 	public float mouseAngle;
 
 	public Player() {
-		initEntity(Display.getWidth() / 2 - SIZE / 2, Display.getHeight() / 2 - SIZE / 2, SIZE, SIZE, "player/player", true, 1.5f, Weapon.WARHAMMER, 100, Armour.NOT_SUPER_ARMOUR);
+		initEntity(Display.getWidth() / 2 - SIZE / 2, Display.getHeight() / 2 - SIZE / 2, SIZE, SIZE, "player/player", true, 1.5f, Weapon.WARHAMMER, 100, Armour.SUPER_ARMOUR);
 	}
 	
 	public void getInput() {
@@ -81,7 +81,7 @@ public class Player extends Entity {
 		checkDeath();
 		updateMouseAngle();
 		act();
-		handleAttack();
+//		handleAttack();
 		checkFlags();
 		checkTexture();
 	}
@@ -101,51 +101,25 @@ public class Player extends Entity {
 	private void act() {
 		float moveAmount = moveSpeed * speedFactor * Time.getDelta() / (armour.weight / 2);
 		float diagonalMoveAmount = moveAmount * (float)(Math.sqrt(2) / 2);
-		ArrayList<GameObject> collidingWith = Utils.collidesWith(this);
-		if (collidingWith.size() == 0 || !Utils.isCollidingWithSolids(this)) {
-			if (xMoveVector != 0 && yMoveVector != 0) {
-				x += diagonalMoveAmount * xMoveVector;
-				y += diagonalMoveAmount * yMoveVector;
-			} else {
-				x += moveAmount * xMoveVector;
-				y += moveAmount * yMoveVector;
-			}
-			collidingWith = Utils.collidesWith(this);
-			for (GameObject go : collidingWith) {
-				if (!go.solid) {
-					continue;
-				}
-				correctCollision(go, collidingWith);
-			}
-			/*
-			ArrayList<GameObject> touchingWith = Utils.touchingWith(this);
-			for (GameObject go1 : touchingWith) {
-				if (go1 instanceof FloorItem) {
-					if (pickupFlag) {
-						pickUp((FloorItem)go1);
-					}
-					continue;
-				} else if (go1 instanceof Container) {
-					if (useFlag) {
-						((Container)go1).attOpen();
-					}
-				}
-			}
-			*/
-		} else {
-			System.out.println("Error: player should not be colliding with anything when the frame updates");
+		if (xMoveVector != 0 && yMoveVector != 0) {
+			x += diagonalMoveAmount * xMoveVector;
+			y += diagonalMoveAmount * yMoveVector;
+		} 
+		else {
+			x += moveAmount * xMoveVector;
+			y += moveAmount * yMoveVector;
 		}
 	}
 	
-	private void handleAttack() {
-		ArrayList<Entity> targetList = new ArrayList<Entity>();
-		for (GameObject go : Main.game.currentObjects) {
-			if (go != this && go instanceof Entity && Utils.isCollidingWithSector(go, this, mouseAngle)) {
-				targetList.add((Entity)go);
-			}
-		}
-		attAttack(attackFlag, true, targetList);
-	}
+//	private void handleAttack() {
+//		ArrayList<Entity> targetList = new ArrayList<Entity>();
+//		for (GameObject go : Main.game.currentObjects) {
+//			if (go != this && go instanceof Entity && Utils.isCollidingWithSector(go, this, mouseAngle)) {
+//				targetList.add((Entity)go);
+//			}
+//		}
+//		attAttack(attackFlag, true, targetList);
+//	}
 	
 	private void checkFlags() {
 		attackFlag = false;
