@@ -9,6 +9,7 @@ import org.newdawn.slick.opengl.Texture;
 import engine.Main;
 import game.Game;
 import game.Time;
+import game.Timer;
 import gameobject.GameObject;
 import utils.Utils;
 
@@ -20,7 +21,8 @@ public abstract class Entity extends GameObject {
 	
 	public Weapon weapon;
 	public boolean attacking;
-	public float attackDelayTimer;
+	public Timer attackTimer;
+	public Timer attackSpeedTimer;
 	
 	public int currentHealth;
 	public int maxHealth;
@@ -39,30 +41,30 @@ public abstract class Entity extends GameObject {
 		this.maxHealth = maxHealth;
 		currentHealth = maxHealth;
 		speedFactor = 1;
+		attackTimer = new Timer(100f);
+		attackSpeedTimer = new Timer(1f / weapon.attackSpeed);
 	}
 	
-	public void attAttack(boolean triggerCondition, boolean damageCondition, ArrayList<Entity> damageRecipients) {
-		if (attackDelayTimer >= 1f / weapon.attackSpeed && !attacking) {
+	public void attemptAttack(boolean triggerCondition, boolean damageCondition, ArrayList<Entity> damageRecipients) {
+		if (!attackTimer.isRunning() && !attackSpeedTimer.isRunning()) {
 			if (triggerCondition) {
-				attacking = true;
-				attackDelayTimer = 0;
+				attackTimer.start();
+				attackSpeedTimer.start();
 			}
-		} else {
-			attackDelayTimer += (double)Time.getDifference() / 1000000000;
 		}
-		if (attacking && attackDelayTimer >= weapon.windUpTime + weapon.attackTime) { //damage registers when they finish their swing
+		if (attackTimer.progress() >= weapon.windUpTime + weapon.attackTime) { //damage registers when they finish their swing
 			if (damageCondition) {
 				for (Entity e : damageRecipients) {
 					e.takeDamage(weapon.damage);
 				}
 			}
-			attacking = false;
+			attackTimer.reset();
 		}
 	}
 	
 	public void renderTargetSector(float angle) {
-		if (attacking) {
-			if (attackDelayTimer >= weapon.windUpTime && attackDelayTimer <= weapon.windUpTime + weapon.attackTime) {
+		if (attackTimer.isRunning()) {
+			if (attackTimer.progress() >= weapon.windUpTime && attackTimer.progress() <= weapon.windUpTime + weapon.attackTime) {
 				glColor3f(1, 0, 0);
 			}
 			Utils.drawSector(x + width / 2, y + height / 2, -0.3f, weapon.attackRange, angle, 90f);

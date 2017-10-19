@@ -1,13 +1,12 @@
 package entity;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.Display;
 
 import engine.Main;
 import game.Time;
+import game.Timer;
 import gameobject.GameObject;
 import utils.Utils;
 
@@ -22,8 +21,7 @@ public class Enemy extends Entity {
 	private final int ROAM_MAX_PAUSE_TIME = 3;
 	private float roamX;
 	private float roamY;
-	private float roamDelay;
-	private double roamDelayTimer;
+	private Timer roamDelayTimer;
 	
 	
 	public Enemy(float x, float y, int size, boolean solid, float moveSpeed, boolean aggressive,
@@ -33,9 +31,7 @@ public class Enemy extends Entity {
 		this.detectRange = detectRange;
 		roamX = x;
 		roamY = y;
-		roamDelay = 1f;
 		attacking = false;
-		attackDelayTimer = 50f;
 	}
 	
 	public void update() {
@@ -67,7 +63,7 @@ public class Enemy extends Entity {
 				Utils.calculateAngle(x + width / 2, y + height / 2, target.x + target.width / 2, target.y + target.height / 2));
 		ArrayList<Entity> targetAsList = new ArrayList<Entity>();
 		targetAsList.add(target);
-		attAttack(targetWithinRange, targetWithinRange, targetAsList);
+		attemptAttack(targetWithinRange, targetWithinRange, targetAsList);
 	}
 	
 	private void chaseTarget() {
@@ -100,13 +96,10 @@ public class Enemy extends Entity {
 	
 	private void roam() {
 		if (x == roamX && y == roamY) {
-			if (roamDelayTimer >= roamDelay) {
-				roamDelay = Utils.genRandomNumber(ROAM_MAX_PAUSE_TIME) + 1;
+			if (roamDelayTimer == null || !roamDelayTimer.isRunning()) {
+				roamDelayTimer = new Timer(Utils.genRandomNumber(ROAM_MAX_PAUSE_TIME) + 1);
 				roamX = createNewRoam(roamX, 32, Display.getWidth() - 32 - width);
 				roamY = createNewRoam(roamY, 32, Display.getHeight() - 32 - height);
-				roamDelayTimer = 0;
-			} else {
-				roamDelayTimer += (double)Time.getDifference() / 1000000000;
 			}
 		} else {
 			float initialMoveSpeed = moveSpeed * speedFactor * Time.getDelta() * ROAM_SPEED_FACTOR;

@@ -1,7 +1,5 @@
 package entity;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
@@ -10,6 +8,7 @@ import org.lwjgl.opengl.Display;
 
 import engine.Main;
 import game.Time;
+import game.Timer;
 import gameobject.GameObject;
 import utils.Utils;
 
@@ -17,8 +16,7 @@ public class Player extends Entity {
 	
 	public static final int SIZE = 32;
 	public boolean attackFlag = false;
-	public boolean dashFlag = false;
-	public float dashTimer;
+	public Timer dashTimer = new Timer(0.25f);
 	public float mouseAngle;
 
 	public Player() {
@@ -50,7 +48,7 @@ public class Player extends Entity {
 			if (Keyboard.getEventKeyState()) {
 				// Dash Key
 				if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
-					dashFlag = true;
+					dashTimer.start();
 				}
 				// Teleportation
 				if (Keyboard.getEventKey() == Keyboard.KEY_T) {
@@ -82,7 +80,7 @@ public class Player extends Entity {
 		updateMouseAngle();
 		act();
 		handleAttack();
-		checkFlags();
+		checkTimers();
 		checkTexture();
 	}
 	
@@ -144,22 +142,17 @@ public class Player extends Entity {
 				targetList.add((Entity)go);
 			}
 		}
-		attAttack(attackFlag, true, targetList);
+		attemptAttack(attackFlag, true, targetList);
 	}
 	
-	private void checkFlags() {
+	private void checkTimers() {
 		attackFlag = false;
 		
 		// Dash functionality for the player
-		if (dashFlag) {
-			if (dashTimer >= 0.25f) {
-				speedFactor = 1.0f;
-				dashFlag = false;
-				dashTimer = 0.0f;
-			} else {
-				speedFactor = 4.0f;
-				dashTimer += (double)Time.getDifference() / 1000000000;
-			}
+		if (dashTimer.isRunning()) {
+			speedFactor = 4.0f;
+		} else {
+			speedFactor = 1.0f;
 		}
 		/*
 		Item firstItemInInventory = inventory.getContents()[0];
