@@ -35,7 +35,7 @@ public abstract class Entity extends GameObject {
 						   boolean solid, float moveSpeed, Weapon weapon, int maxHealth) {
 		setTextureNameArray(textureNameArrayPrefix);
 		loadTextureArray(textureNameArray);
-		initGameObject(x, y, 0f, width, height, "entity/" + textureNameArray[4], solid);
+		initGameObject(x, y, 0f, width, height, "entity/" + textureNameArray[4], solid, null);
 		this.moveSpeed = moveSpeed;
 		this.weapon = weapon;
 		this.maxHealth = maxHealth;
