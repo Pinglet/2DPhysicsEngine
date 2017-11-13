@@ -16,10 +16,13 @@ public class Game {
 	public ArrayList<GameObject> objectsToDelete;
 	public ArrayList<GameObject> objectsToAdd;
 	
+	public Renderer renderer;
+	
 
 
 	public Game() {
 		player = new Player();
+		renderer = new Renderer();
 		currentObjects = new ArrayList<GameObject>();
 		currentObjects.add(player);
 		objectsToDelete = new ArrayList<GameObject>();
@@ -48,10 +51,13 @@ public class Game {
 	
 	public void render() {
 		if (!paused) {
-			for (GameObject go : currentObjects) {
-				go.render();
-			}
-			player.render();
+			
+			renderer.renderObjects(currentObjects);
+			
+//			for (GameObject go : currentObjects) {
+//				go.render();
+//			}
+//			player.render();
 		}
 	}
 	

@@ -27,8 +27,8 @@ public abstract class Entity extends GameObject {
 	public int maxHealth;
 	public float moveSpeed;
 	public float attackRange;
-	public String[] textureNameArray;
-	public Texture[] textureArray;
+//	public String[] textureNameArray;
+//	public Texture[] textureArray;
 
 	public void initEntity(float x, float y, int width, int height, String textureNameArrayPrefix,
 						   boolean solid, float moveSpeed, Weapon weapon, int maxHealth, Armour armour) {

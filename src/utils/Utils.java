@@ -22,10 +22,6 @@ import gameobject.GameObject;
 
 public final class Utils {
 	
-	private Utils() {
-		
-	}
-	
 	private static Random random = new Random();
 	
 	//generates an integer between 0 (inclusive) and maxBound (exclusive)
@@ -237,15 +233,15 @@ public final class Utils {
 		return collidingWith;
 	}
 	
-	public static boolean isCollidingWithSolids(GameObject object) {
-		ArrayList<GameObject> collidingWith = collidesWith(object);
-		for (GameObject go : collidingWith) {
-			if (go.solid) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	public static boolean isCollidingWithSolids(GameObject object) {
+//		ArrayList<GameObject> collidingWith = collidesWith(object);
+//		for (GameObject go : collidingWith) {
+//			if (go.solid) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 	
 	public static float calculateXDistance(GameObject go1, GameObject go2) {
 		return go2.x - go1.x;
