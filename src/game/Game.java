@@ -1,56 +1,34 @@
 package game;
 
 import java.util.ArrayList;
-
-import entity.Player;
 import gameobject.GameObject;
 
 public class Game {
 
 	public boolean paused = false;
 	
-	public Player player;
-	
 	public ArrayList<GameObject> currentObjects;
 	public ArrayList<GameObject> objectsToDelete;
 	public ArrayList<GameObject> objectsToAdd;
 
 	public Game() {
-		player = new Player();
 		currentObjects = new ArrayList<GameObject>();
-		currentObjects.add(player);
 		objectsToDelete = new ArrayList<GameObject>();
 		objectsToAdd = new ArrayList<GameObject>();
 	}
 	
-	public void getInput() {
-		if (!paused) {
-			player.xMoveVector = 0;
-			player.yMoveVector = 0;
-		}
-		player.getInput();
-	}
 	
 	public void update() {
 		if (!paused) {
-			player.update();
 			for (GameObject go : currentObjects) {
 				go.update();
 			}
 			deleteObjects();
 			addObjects();
-			//orarily moved player.update() from here to above go.update()
 		}
 	}
 	
-	public void render() {
-		if (!paused) {
-			for (GameObject go : currentObjects) {
-				go.render();
-			}
-			player.render();
-		}
-	}
+
 	
 	private void deleteObjects() {
 		if (!objectsToDelete.isEmpty()) {

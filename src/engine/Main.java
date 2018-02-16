@@ -90,7 +90,6 @@ public final class Main {
 	//Runs the game, as long as the display is not closed.
 	private static void gameLoop() {
 		while (!Display.isCloseRequested()) {
-			game.getInput();
 			Time.update();
 			game.update();
 			renderGame();
@@ -102,7 +101,6 @@ public final class Main {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glLoadIdentity();
-		game.render();
 		Display.update();
 		Display.sync(60);
 	}

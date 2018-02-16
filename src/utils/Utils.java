@@ -15,7 +15,6 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 import engine.Main;
-import entity.Entity;
 import gameobject.GameObject;
 
 public final class Utils {
