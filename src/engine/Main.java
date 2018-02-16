@@ -15,6 +15,7 @@ import org.lwjgl.opengl.DisplayMode;
 import game.Game;
 import game.Time;
 
+
 public final class Main {
 	
 	//Sets game window width to 960 pixels, and width to 640 pixels.
@@ -35,6 +36,7 @@ public final class Main {
 		initTime();
 		gameLoop();
 		cleanUp();
+
 	}
 	
 	//Sets all necessary settings in the LWJGL Display class, and sets up keyboard and mouse input.
@@ -42,7 +44,7 @@ public final class Main {
 		try {
 			Display.setDisplayMode(new DisplayMode(DISPLAY_WIDTH, DISPLAY_HEIGHT));
 			Display.create();
-			Display.setTitle("RPG Legacy Code");
+			Display.setTitle("2D Physics Engine");
 			Display.setVSyncEnabled(true);
 			Keyboard.create();
 			Mouse.create();
@@ -59,7 +61,7 @@ public final class Main {
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
-		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_DEPTH_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glClearColor(61/255f, 124/255f, 160/255f, 1);
 		glColor3f(1, 1, 1);
@@ -101,6 +103,7 @@ public final class Main {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glLoadIdentity();
+		game.render();
 		Display.update();
 		Display.sync(60);
 	}
@@ -110,9 +113,7 @@ public final class Main {
 		Display.destroy();
 		Keyboard.destroy();
 		Mouse.destroy();
-		//Audio class must be set up first.
-		//Audio.destroy();
-		//The following line is used orarily until the Audio class is created:
 		AL.destroy();
 	}
+	
 }
