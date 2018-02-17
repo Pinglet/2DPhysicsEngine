@@ -30,7 +30,9 @@ public class GameObject {
 	}
 	
 	public void update() {
-		
+		for (Component component : components.values()) {
+			component.update();
+		}
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.Display;
 
 import components.Mesh;
+import components.RigidBody;
 import gameobject.GameObject;
 import utils.Utils;
 
@@ -27,8 +28,11 @@ public class Game {
 		
 		GameObject player = new GameObject();
 		player.currentTexture = Utils.quickLoad("entity/player/playerup");
-		player.components.put("mesh", new Mesh((Display.getWidth()/2-PLAYER_SIZE/2), (Display.getHeight()/2-PLAYER_SIZE/2), 0, PLAYER_SIZE, PLAYER_SIZE));
+		player.components.put("mesh", new Mesh((Display.getWidth()/2-PLAYER_SIZE/2), (Display.getHeight()/2-PLAYER_SIZE/2), 0, PLAYER_SIZE, PLAYER_SIZE, player));
+		player.components.put("rigidbody", new RigidBody(player, 1));
 		objectsToAdd.add(player);
+		RigidBody rb = (RigidBody) player.components.get("rigidbody");
+		rb.addForce(1f, 1f);
 	}
 	
 	

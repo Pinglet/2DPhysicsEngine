@@ -16,9 +16,9 @@ public class Renderer {
 	public void renderObjects(ArrayList<GameObject> gameObjects) {
 		
 		Texture oTexture;
-		int oXPos;
-		int oYPos;
-		int oZPos;
+		float oXPos;
+		float oYPos;
+		float oZPos;
 		int oWidth;
 		int oHeight;		
 		

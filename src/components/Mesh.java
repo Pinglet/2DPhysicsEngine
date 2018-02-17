@@ -8,30 +8,37 @@ import gameobject.GameObject;
 public class Mesh extends Component {
 
 	public GameObject object;
-	private int x;
-	private int y;
-	private int z;
+	private float xPos;
+	private float yPos;
+	private float zPos;
 	private int width;
 	private int height;
 	
-	public Mesh(int newX, int newY, int newZ, int newWidth, int newHeight) {
-		x = newX;
-		y = newY;
-		z = newZ;
+	public Mesh(float newX, float newY, float newZ, int newWidth, int newHeight, GameObject newObject) {
+		xPos = newX;
+		yPos = newY;
+		zPos = newZ;
 		width = newWidth;
-		height = newHeight;		
+		height = newHeight;	
+		object = newObject;
 	}
 	
-	public int getX() {
-		return x;
+	public float getX() {
+		return xPos;
+	}
+	public void addX(float x) {
+		xPos += x;
 	}
 	
-	public int getY() {
-		return y;
+	public float getY() {
+		return yPos;
+	}
+	public void addY(float y) {
+		yPos += y;
 	}
 	
-	public int getZ() {
-		return z;
+	public float getZ() {
+		return zPos;
 	}
 	
 	public int getWidth() {
