@@ -45,4 +45,22 @@ public class Force {
 		life -= time;
 	}
 	
+	// Adds the effects of 2 forces and stores result in the object calling the method
+	public void sumForces(Force otherForce) {
+		xForce += otherForce.getXForce();
+		yForce += otherForce.getYForce();
+	}
+	
+	// Returns the total force of both vectors
+	public float totalForce() {
+		return (float)Math.sqrt((xForce*xForce+yForce*yForce));
+	}
+	
+	public boolean equals(Force otherForce) {
+		if (xForce==otherForce.getXForce() && yForce==otherForce.getYForce()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

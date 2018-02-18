@@ -93,6 +93,7 @@ public final class Main {
 	private static void gameLoop() {
 		while (!Display.isCloseRequested()) {
 			Time.update();
+			game.getInput();
 			game.update();
 			renderGame();
 		}

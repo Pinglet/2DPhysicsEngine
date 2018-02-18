@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import components.Mesh;
@@ -17,6 +18,8 @@ public class Game {
 	public ArrayList<GameObject> currentObjects;
 	public ArrayList<GameObject> objectsToDelete;
 	public ArrayList<GameObject> objectsToAdd;
+	
+	public GameObject player;
 
 	public Renderer renderer;
 	
@@ -26,13 +29,11 @@ public class Game {
 		objectsToAdd = new ArrayList<GameObject>();
 		renderer = new Renderer();
 		
-		GameObject player = new GameObject();
+		player = new GameObject();
 		player.currentTexture = Utils.quickLoad("entity/player/playerup");
 		player.components.put("mesh", new Mesh((Display.getWidth()/2-PLAYER_SIZE/2), (Display.getHeight()/2-PLAYER_SIZE/2), 0, PLAYER_SIZE, PLAYER_SIZE, player));
-		player.components.put("rigidbody", new RigidBody(player, 1));
+		player.components.put("rigidbody", new RigidBody(player, 10f));
 		objectsToAdd.add(player);
-		RigidBody rb = (RigidBody) player.components.get("rigidbody");
-		rb.addForce(1f, 1f);
 	}
 	
 	
@@ -43,6 +44,20 @@ public class Game {
 			}
 			deleteObjects();
 			addObjects();
+		}
+	}
+	
+	public void getInput() {
+		RigidBody playerRB = (RigidBody) player.components.get("rigidbody");
+		if (Keyboard.isKeyDown(Keyboard.KEY_W) && !Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			playerRB.addForce(0, 5);
+		} else if (!Keyboard.isKeyDown(Keyboard.KEY_W) && Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			playerRB.addForce(0, -5);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_A) && !Keyboard.isKeyDown(Keyboard.KEY_D)) {
+			playerRB.addForce(-5, 0);
+		} else if (!Keyboard.isKeyDown(Keyboard.KEY_A) && Keyboard.isKeyDown(Keyboard.KEY_D)) {
+			playerRB.addForce(5, 0);
 		}
 	}
 	
