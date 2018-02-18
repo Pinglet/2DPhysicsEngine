@@ -34,7 +34,7 @@ public class Game {
 		
 		player = new GameObject();
 		player.currentTexture = Utils.quickLoad("entity/player/playerup");
-		player.components.put("mesh", new Mesh((Display.getWidth()/2-PLAYER_SIZE/2), (Display.getHeight()/2-PLAYER_SIZE/2), 0, PLAYER_SIZE, PLAYER_SIZE, player));
+		player.components.put("mesh", new Mesh(Display.getWidth()/2, Display.getHeight()/2, 0, PLAYER_SIZE, PLAYER_SIZE, player));
 		player.components.put("rigidbody", new RigidBody(player, 0.6f, 5f));
 		objectsToAdd.add(player);
 	}
@@ -52,6 +52,7 @@ public class Game {
 	
 	public void getInput() {
 		RigidBody playerRB = (RigidBody) player.components.get("rigidbody");
+		Mesh playerMesh = (Mesh) player.components.get("mesh");
 		if (Keyboard.isKeyDown(Keyboard.KEY_W) && !Keyboard.isKeyDown(Keyboard.KEY_S)) {
 			playerRB.addForce(new Force(0, 5));
 		} else if (!Keyboard.isKeyDown(Keyboard.KEY_W) && Keyboard.isKeyDown(Keyboard.KEY_S)) {
@@ -66,7 +67,10 @@ public class Game {
 			playerRB.addForce(new Force(50, 0, ForceType.zeroVForce));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
-			new Explosion(Display.getWidth()/2, Display.getHeight()/2, 10, currentObjects);
+			new Explosion(Display.getWidth()/2, Display.getHeight()/2, 2, currentObjects);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
+			System.out.printf("x: %f, y: %f%n", playerMesh.getX(), playerMesh.getY());
 		}
 	}
 	

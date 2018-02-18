@@ -4,18 +4,11 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Random;
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.awt.geom.Ellipse2D;
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
-
-import engine.Main;
-import gameobject.GameObject;
 
 public final class Utils {
 	
@@ -69,7 +62,9 @@ public final class Utils {
 		texture.bind();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //temporary additions, supposed to reduce blurring
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //temporary additions, supposed to reduce blurring
-		glTranslatef(x, y, z);
+		float xLeft = x - (width/2);
+		float yTop = y - (height/2);
+		glTranslatef(xLeft, yTop, z);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0, 1);
 		glVertex2f(0, 0);

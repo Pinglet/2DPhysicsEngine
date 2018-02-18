@@ -8,6 +8,7 @@ import gameobject.GameObject;
 public class Mesh extends Component {
 
 	public GameObject object;
+	// The x and y co-ords determine the centre of the box
 	private float xPos;
 	private float yPos;
 	private float zPos;
