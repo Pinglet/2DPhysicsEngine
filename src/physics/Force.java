@@ -4,18 +4,21 @@ public class Force {
 
 	private float xForce;
 	private float yForce;
-	private float life;
 	
-	public Force(float x, float y) {
-		xForce = x;
-		yForce = y;
-		life = 1;
+	public enum ForceType {
+		force, zeroVForce
 	}
 	
-	public Force(float x, float y, float startTime) {
+	private final ForceType forceType;
+	
+	public Force(float x, float y, ForceType f) {
 		xForce = x;
 		yForce = y;
-		life = startTime;
+		forceType = f;
+	}
+	
+	public Force(float x, float y) {
+		this(x, y, ForceType.force);
 	}
 	
 	public float getXForce() {
@@ -38,11 +41,9 @@ public class Force {
 		yForce += y;
 	}
 	
-	public float getLife() {
-		return life;
-	}
-	public void reduceLife(float time) {
-		life -= time;
+	// Returns the type of force
+	public ForceType getForceType() {
+		return forceType;
 	}
 	
 	// Adds the effects of 2 forces and stores result in the object calling the method

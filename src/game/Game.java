@@ -8,6 +8,9 @@ import org.lwjgl.opengl.Display;
 import components.Mesh;
 import components.RigidBody;
 import gameobject.GameObject;
+import physics.Explosion;
+import physics.Force;
+import physics.Force.ForceType;
 import utils.Utils;
 
 public class Game {
@@ -32,7 +35,7 @@ public class Game {
 		player = new GameObject();
 		player.currentTexture = Utils.quickLoad("entity/player/playerup");
 		player.components.put("mesh", new Mesh((Display.getWidth()/2-PLAYER_SIZE/2), (Display.getHeight()/2-PLAYER_SIZE/2), 0, PLAYER_SIZE, PLAYER_SIZE, player));
-		player.components.put("rigidbody", new RigidBody(player, 10f));
+		player.components.put("rigidbody", new RigidBody(player, 0.6f, 5f));
 		objectsToAdd.add(player);
 	}
 	
@@ -50,14 +53,20 @@ public class Game {
 	public void getInput() {
 		RigidBody playerRB = (RigidBody) player.components.get("rigidbody");
 		if (Keyboard.isKeyDown(Keyboard.KEY_W) && !Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			playerRB.addForce(0, 5);
+			playerRB.addForce(new Force(0, 5));
 		} else if (!Keyboard.isKeyDown(Keyboard.KEY_W) && Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			playerRB.addForce(0, -5);
+			playerRB.addForce(new Force(0, -5));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_A) && !Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			playerRB.addForce(-5, 0);
+			playerRB.addForce(new Force(-5, 0));
 		} else if (!Keyboard.isKeyDown(Keyboard.KEY_A) && Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			playerRB.addForce(5, 0);
+			playerRB.addForce(new Force(5, 0));
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
+			playerRB.addForce(new Force(50, 0, ForceType.zeroVForce));
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
+			new Explosion(Display.getWidth()/2, Display.getHeight()/2, 10, currentObjects);
 		}
 	}
 	

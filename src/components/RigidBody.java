@@ -24,12 +24,17 @@ public class RigidBody extends Component {
 	private Force resultant;
 	private Force friction;
 	
-	public RigidBody(GameObject newObject, float newMass) {
+	public RigidBody(GameObject newObject, float newCoef, float newMass) {
 		forceBox = new ArrayList<Force>();
 		object = newObject;
 		mass = newMass;
-		frictionCoef = 0.6f;
+		frictionCoef = newCoef;
 		resultant = new Force(0, 0);
+	}
+	
+	// Constructor with default mass of 1
+	public RigidBody(GameObject newObject, float newCoef) {
+		this(newObject, newCoef, 1);
 	}
 	
 	public void update() {
@@ -50,20 +55,14 @@ public class RigidBody extends Component {
 			Force f = iter.next();
 			resultant.addXForce(f.getXForce());
 			resultant.addYForce(f.getYForce());
-			f.reduceLife(1*Time.getDelta());
-			if (f.getLife()<=0) {
-				iter.remove();
-			}
+			iter.remove();
 		}
 
 		// Calculates the angle of the friction force from the Normal
-		
-		
-		float resultantVelocity = (float)Math.sqrt(xVelocity*xVelocity+yVelocity*yVelocity);
+		float resultantVelocity = PhysicsUtils.calculateHypotenuse(xVelocity, yVelocity);
 		
 		if(resultantVelocity>0) {
-			double angleFromNorm = Math.abs(Math.asin(yVelocity/resultantVelocity));
-			System.out.println("Angle :"+angleFromNorm);
+			float angleFromNorm = PhysicsUtils.angleFromX(yVelocity, resultantVelocity);
 			float frictionForce = mass*frictionCoef;
 			
 			float xFric = (float)Math.cos(angleFromNorm)*frictionForce;
@@ -78,12 +77,10 @@ public class RigidBody extends Component {
 			friction.setXForce(xFric);
 			friction.setYForce(yFric);
 			
-			System.out.println("xFricF :"+xFric);
-			System.out.println("yFricF :"+yFric);
-			
 			resultant.sumForces(friction);
-			System.out.println("xResultant :"+resultant.getXForce());
-			System.out.println("yResultant :"+resultant.getYForce());
+			
+			System.out.println(resultant.getXForce());
+			System.out.println(resultant.getYForce());
 		}
 	}
 	
@@ -111,19 +108,18 @@ public class RigidBody extends Component {
 		mesh.addY(yVelocity*time);
 	}
 	
-	public void inputForceFB(Force force) {
-		forceBox.add(force);	
-	}
-	
-	public void addForce(float x, float y, int startTime) {
-		Force force = new Force(x, y, startTime);
-		forceBox.add(force);
-	}	
-	
-	public void addForce(float x, float y) {
-		Force force = new Force(x, y, 1);
+	public void addForce(Force force) {
+		switch (force.getForceType()) {
+			case force:
+				break;
+			case zeroVForce:
+				xVelocity = 0;
+				yVelocity = 0;
+				break;
+		}	
 		forceBox.add(force);
 	}
+	
 	
 	public void setFriction(float newFriction) {
 		frictionCoef = newFriction;
