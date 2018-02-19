@@ -21,7 +21,7 @@ public class Explosion {
 		yPos = newY;
 		force = 1000*newForce;
 		affectedObjects = objects;
-		explosionDissapation = 0.1f;
+		explosionDissapation = -10f;
 		applyForcesToObjects();
 	}
 	
@@ -36,13 +36,17 @@ public class Explosion {
 			float xDiff = currMesh.getX()-xPos;
 			float yDiff = currMesh.getY()-yPos;
 			float euclidDiff = PhysicsUtils.calculateHypotenuse(xDiff, yDiff);
-			if (euclidDiff<1) {
-				euclidDiff = 1;
-			}
 			
-			if (euclidDiff>0) {
+			if (euclidDiff>0) {		
+				
+				if (euclidDiff<32) {
+					euclidDiff = 32;
+				}
+				
 				float angleFromNorm = PhysicsUtils.angleFromX(yDiff, euclidDiff);
-				float forceApplied = force/(euclidDiff*euclidDiff*explosionDissapation);
+				
+				euclidDiff += explosionDissapation;
+				float forceApplied = force/(euclidDiff*euclidDiff);
 				
 				float forceX = (float) Math.cos(angleFromNorm)*forceApplied;
 				float forceY = (float) Math.sin(angleFromNorm)*forceApplied;

@@ -63,8 +63,8 @@ public final class Utils {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //temporary additions, supposed to reduce blurring
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //temporary additions, supposed to reduce blurring
 		float xLeft = x - (width/2);
-		float yTop = y - (height/2);
-		glTranslatef(xLeft, yTop, z);
+		float yBottom = y - (height/2);
+		glTranslatef(xLeft, yBottom, z);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0, 1);
 		glVertex2f(0, 0);

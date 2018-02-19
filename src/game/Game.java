@@ -67,7 +67,7 @@ public class Game {
 			playerRB.addForce(new Force(50, 0, ForceType.zeroVForce));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
-			new Explosion(Display.getWidth()/2, Display.getHeight()/2, 2, currentObjects);
+			new Explosion(Display.getWidth()/2, Display.getHeight()/2, 50, currentObjects);
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
 			System.out.printf("x: %f, y: %f%n", playerMesh.getX(), playerMesh.getY());

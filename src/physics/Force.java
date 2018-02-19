@@ -1,9 +1,13 @@
 package physics;
 
+import utils.Vector2;
+
 public class Force {
 
-	private float xForce;
-	private float yForce;
+//	private float xForce;
+//	private float yForce;
+	
+	private Vector2 vector;
 	
 	public enum ForceType {
 		force, zeroVForce
@@ -11,34 +15,45 @@ public class Force {
 	
 	private final ForceType forceType;
 	
-	public Force(float x, float y, ForceType f) {
-		xForce = x;
-		yForce = y;
+	public Force(Vector2 vector, ForceType f) {
+		this.vector = vector;
 		forceType = f;
 	}
 	
+	public Force(float x, float y, ForceType f) {
+		this(new Vector2(x, y), f);
+	}
+	
+	public Force(Vector2 vector) {
+		this(vector, ForceType.force);
+	}
+	
 	public Force(float x, float y) {
-		this(x, y, ForceType.force);
+		this(new Vector2(x, y), ForceType.force);
 	}
 	
-	public float getXForce() {
-		return xForce;
+	public float getX() {
+		return vector.getX();
 	}
-	public void setXForce(float x) {
-		xForce = x;
+	public void setX(float x) {
+		vector.setX(x);
 	}
-	public void addXForce(float x) {
-		xForce += x;
+	public void addX(float x) {
+		vector.setX(vector.getX()+x);
 	}
 	
-	public float getYForce() {
-		return yForce;
+	public float getY() {
+		return vector.getY();
 	}	
-	public void setYForce(float y) {
-		yForce = y;
+	public void setY(float y) {
+		vector.setY(y);
 	}
-	public void addYForce(float y) {
-		yForce += y;
+	public void addY(float y) {
+		vector.setY(vector.getY()+y);
+	}
+	
+	public Vector2 getVector() {
+		return vector;
 	}
 	
 	// Returns the type of force
@@ -47,18 +62,17 @@ public class Force {
 	}
 	
 	// Adds the effects of 2 forces and stores result in the object calling the method
-	public void sumForces(Force otherForce) {
-		xForce += otherForce.getXForce();
-		yForce += otherForce.getYForce();
+	public Force sumForce(Force otherForce) {
+		return new Force(vector.sum(otherForce.getVector()));
 	}
 	
-	// Returns the total force of both vectors
-	public float totalForce() {
-		return (float)Math.sqrt((xForce*xForce+yForce*yForce));
+	// Returns the total force of two forces
+	public float totalForce(Force other) {
+		return (float)Math.sqrt(vector.dot(other.getVector()));
 	}
 	
 	public boolean equals(Force otherForce) {
-		if (xForce==otherForce.getXForce() && yForce==otherForce.getYForce()) {
+		if (vector.getX()==otherForce.getX() && vector.getY()==otherForce.getY()) {
 			return true;
 		} else {
 			return false;

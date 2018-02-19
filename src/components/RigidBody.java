@@ -6,6 +6,7 @@ import java.util.Iterator;
 import game.Time;
 import gameobject.GameObject;
 import physics.*;
+import utils.Vector2;
 
 public class RigidBody extends Component {
 
@@ -14,14 +15,13 @@ public class RigidBody extends Component {
 	
 	private ArrayList<Force> forceBox;
 	
-	private float xVelocity;
-	private float yVelocity;
-	private float xAccel;
-	private float yAccel;
+	private Vector2 velocity = new Vector2(0, 0);
+	private Vector2 acceleration = new Vector2(0, 0);
+	
 	private float mass;
 	
 	private float frictionCoef;
-	private Force resultant;
+	private Force resultant = new Force(0, 0);
 	private Force friction;
 	
 	public RigidBody(GameObject newObject, float newCoef, float newMass) {
@@ -29,7 +29,6 @@ public class RigidBody extends Component {
 		object = newObject;
 		mass = newMass;
 		frictionCoef = newCoef;
-		resultant = new Force(0, 0);
 	}
 	
 	// Constructor with default mass of 1
@@ -46,66 +45,66 @@ public class RigidBody extends Component {
 	
 	private void updateRForce() {
 		friction = new Force(0, 0);
-		resultant.setXForce(0);
-		resultant.setYForce(0);
+		resultant.setX(0);
+		resultant.setY(0);
 		
 		Iterator<Force> iter = forceBox.iterator();
 		
 		while (iter.hasNext()) {
 			Force f = iter.next();
-			resultant.addXForce(f.getXForce());
-			resultant.addYForce(f.getYForce());
+			resultant.addX(f.getX());
+			resultant.addY(f.getY());
 			iter.remove();
 		}
 
 		// Calculates the angle of the friction force from the Normal
-		float resultantVelocity = PhysicsUtils.calculateHypotenuse(xVelocity, yVelocity);
+		float resultantVelocity = velocity.hypotonuse();
 		
 		if(resultantVelocity>0) {
-			float angleFromNorm = PhysicsUtils.angleFromX(yVelocity, resultantVelocity);
+			float angleFromNorm = PhysicsUtils.angleFromX(velocity.getY(), resultantVelocity);
 			float frictionForce = mass*frictionCoef;
 			
 			float xFric = (float)Math.cos(angleFromNorm)*frictionForce;
-			if (xVelocity>0) {
+			if (velocity.getX()>0) {
 				xFric*=-1;
 			}
 			float yFric = (float)Math.sin(angleFromNorm)*frictionForce;
-			if (yVelocity>0) {
+			if (velocity.getY()>0) {
 				yFric*=-1;
 			}
 			
-			friction.setXForce(xFric);
-			friction.setYForce(yFric);
+			friction.setX(xFric);
+			friction.setY(yFric);
 			
-			resultant.sumForces(friction);
+			resultant = resultant.sumForce(friction);
 			
-			System.out.println(resultant.getXForce());
-			System.out.println(resultant.getYForce());
+			System.out.println(resultant.getX());
+			System.out.println(resultant.getY());
 		}
 	}
 	
 	private void updateAcceleration() {
-		xAccel = resultant.getXForce()/mass;
-		yAccel = resultant.getYForce()/mass;
+		acceleration.setX(resultant.getX()/mass);
+		acceleration.setY(resultant.getY()/mass);
 	}
 	
 	private void updateVelocity(float time) {
-		xVelocity += xAccel*time;
-		yVelocity += yAccel*time;
+		velocity.setX(velocity.getX()+acceleration.getX()*time);
+		velocity.setY(velocity.getY()+acceleration.getY()*time);
 		if (friction.equals(resultant)) {
-			if (xAccel/xVelocity>0) {
-				xVelocity = 0;
+			if (acceleration.getX()/velocity.getX()>0) {
+				velocity.setX(0);
 			}
-			if (yAccel/yVelocity>0) {
-				yVelocity = 0;
+			if (acceleration.getY()/velocity.getY()>0) {
+				velocity.setY(0);
 			}
 		}
 	}
 	
 	private void moveMesh(float time) {
 		mesh = (Mesh) object.components.get("mesh");
-		mesh.addX(xVelocity*time);
-		mesh.addY(yVelocity*time);
+		mesh.setX(mesh.getX()+velocity.getX()*time);
+		mesh.setY(mesh.getY()+velocity.getY()*time);
 	}
 	
 	public void addForce(Force force) {
@@ -113,23 +112,22 @@ public class RigidBody extends Component {
 			case force:
 				break;
 			case zeroVForce:
-				xVelocity = 0;
-				yVelocity = 0;
+				velocity.setX(0);
+				velocity.setY(0);
 				break;
 		}	
 		forceBox.add(force);
 	}
-	
 	
 	public void setFriction(float newFriction) {
 		frictionCoef = newFriction;
 	}
 	
 	public float getXVelocity() {
-		return xVelocity;
+		return velocity.getX();
 	}
 	
 	public float getYVelocity() {
-		return yVelocity;
+		return velocity.getX();
 	}
 }
