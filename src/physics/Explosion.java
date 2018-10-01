@@ -39,13 +39,9 @@ public class Explosion {
 			
 			if (euclidDiff>0) {		
 				
-				if (euclidDiff<32) {
-					euclidDiff = 32;
-				}
-				
 				float angleFromNorm = PhysicsUtils.angleFromX(yDiff, euclidDiff);
+				euclidDiff += explosionDissapation + 100;
 				
-				euclidDiff += explosionDissapation;
 				float forceApplied = force/(euclidDiff*euclidDiff);
 				
 				float forceX = (float) Math.cos(angleFromNorm)*forceApplied;
@@ -59,7 +55,10 @@ public class Explosion {
 					forceY *= -1;
 				}
 				
-				currRB.addForce(new Force(forceX, forceY));
+				Force appliedForce = new Force(forceX, forceY);
+				
+				currRB.addForce(appliedForce);
+				currRB.addForce(appliedForce);
 			}
 		}
 	}

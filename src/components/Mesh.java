@@ -11,9 +11,8 @@ public class Mesh extends Component {
 	public GameObject object;
 	// The x and y co-ords determine the centre of the box
 	private Vector2 posXY = new Vector2(0, 0);
-//	private float xPos;
-//	private float yPos;
 	private float zPos;
+	private float rotation = 0;
 	private int width;
 	private int height;
 	
@@ -54,5 +53,12 @@ public class Mesh extends Component {
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
+	}
+	public float getRotation() {
+		return rotation;
 	}
 }

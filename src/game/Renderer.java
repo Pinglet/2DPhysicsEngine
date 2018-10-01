@@ -20,7 +20,8 @@ public class Renderer {
 		float oYPos;
 		float oZPos;
 		int oWidth;
-		int oHeight;		
+		int oHeight;
+		float oRotation;
 		
 		for (GameObject currentObject : gameObjects) {
 			
@@ -31,10 +32,11 @@ public class Renderer {
 				oXPos = mesh.getX();
 				oYPos = mesh.getY();
 				oZPos = mesh.getZ();
-				oWidth = mesh.getWidth();
-				oHeight = mesh.getHeight();
+				oWidth = (int) (mesh.getWidth()*Game.zoomFactor);
+				oHeight = (int) (mesh.getHeight()*Game.zoomFactor);
+				oRotation = mesh.getRotation()*Game.zoomFactor;
 				
-				Utils.drawQuadTex(oTexture, oXPos, oYPos, oZPos, oWidth, oHeight);
+				Utils.drawQuadTex(oTexture, oXPos, oYPos, oZPos, oWidth, oHeight, oRotation);
 				
 			}			
 		}

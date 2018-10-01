@@ -58,12 +58,13 @@ public final class Utils {
 		glEnable(GL_TEXTURE_2D);
 	}
 	
-	public static void drawQuadTex(Texture texture, float x, float y, float z, int width, int height) {
+	public static void drawQuadTex(Texture texture, float x, float y, float z, int width, int height, float rotation) {
 		texture.bind();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //temporary additions, supposed to reduce blurring
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //temporary additions, supposed to reduce blurring
 		float xLeft = x - (width/2);
 		float yBottom = y - (height/2);
+		glRotatef(rotation, 0, 0, z);
 		glTranslatef(xLeft, yBottom, z);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0, 1);

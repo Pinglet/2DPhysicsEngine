@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import components.Mesh;
@@ -22,6 +23,10 @@ public class Game {
 	public ArrayList<GameObject> objectsToDelete;
 	public ArrayList<GameObject> objectsToAdd;
 	
+	public int count = 0;
+	
+	public static float zoomFactor = 1;
+	
 	public GameObject player;
 
 	public Renderer renderer;
@@ -33,8 +38,8 @@ public class Game {
 		renderer = new Renderer();
 		
 		player = new GameObject();
-		player.currentTexture = Utils.quickLoad("entity/player/playerup");
-		player.components.put("mesh", new Mesh(Display.getWidth()/2, Display.getHeight()/2, 0, PLAYER_SIZE, PLAYER_SIZE, player));
+		player.currentTexture = Utils.quickLoad("entity/player/player");
+		player.components.put("mesh", new Mesh(Display.getWidth()/2, Display.getHeight()/2, 1, PLAYER_SIZE, PLAYER_SIZE, player));
 		player.components.put("rigidbody", new RigidBody(player, 0.6f, 5f));
 		objectsToAdd.add(player);
 	}
@@ -66,11 +71,33 @@ public class Game {
 		if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
 			playerRB.addForce(new Force(50, 0, ForceType.zeroVForce));
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
-			new Explosion(Display.getWidth()/2, Display.getHeight()/2, 50, currentObjects);
+		if (Keyboard.isKeyDown(Keyboard.KEY_X)) {
+			new Explosion(Display.getWidth()/2, Display.getHeight()/2, 300, currentObjects);
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
-			System.out.printf("x: %f, y: %f%n", playerMesh.getX(), playerMesh.getY());
+			System.out.printf("x: %f, y: %f Rotation: %f%n", playerMesh.getX(), playerMesh.getY(), playerMesh.getRotation());
+		}	
+		if (Mouse.isButtonDown(0)) {
+			GameObject testyBoi = new GameObject();
+			testyBoi.currentTexture = Utils.quickLoad("entity/enemy/enemy");
+			testyBoi.components.put("mesh", new Mesh(Mouse.getX(), Mouse.getY(), 0, PLAYER_SIZE, PLAYER_SIZE, player));
+			testyBoi.components.put("rigidbody", new RigidBody(testyBoi, 0.8f, 5f));
+			objectsToAdd.add(testyBoi);
+			count++;
+			System.out.println("Count :" + count);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_M)) {
+			System.out.printf("mouse x: %d, mouse y: %d%n", Mouse.getX(), Mouse.getY());
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_E) && !Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+			playerMesh.setRotation(playerMesh.getRotation()+1);
+		} else if (!Keyboard.isKeyDown(Keyboard.KEY_E) && Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+			playerMesh.setRotation(playerMesh.getRotation()-1);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_I) && !Keyboard.isKeyDown(Keyboard.KEY_O)) {
+			zoomFactor += 0.1;
+		} else if (!Keyboard.isKeyDown(Keyboard.KEY_I) && Keyboard.isKeyDown(Keyboard.KEY_O)) {
+			zoomFactor -= 0.1;
 		}
 	}
 	
